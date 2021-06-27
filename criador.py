@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-@author: Patrick Lima e Leonardo Gonçalves
+@authors: Patrick Lima e Leonardo Gonçalves
 """
+
 #%% Importar os pacotes de conexão ao BD
 import psycopg2
 
@@ -9,15 +10,13 @@ import psycopg2
 user = "postgres"
 password = "your_password"
 
-#%% Conexão ao PostgreSQL
-psql_connection_string = 'user={} password={}'.format(user, password)
-conn = psycopg2.connect(psql_connection_string)
+#%% Criação do Banco de Dados
+conn = psycopg2.connect(user=user, password=password)
 cur = conn.cursor()
 
-#%% Criação do Banco de Dados
-conn.autocommit = True
 sql_query = 'CREATE DATABASE grupo_gamma'
 
+conn.autocommit = True
 try:
     cur.execute(sql_query)
 except Exception as e:
@@ -25,24 +24,28 @@ except Exception as e:
     print("Query: " + str(cur.query))
     cur.close()
 else:
-    # Revert autocommit
     conn.autocommit = False
+    cur.close()
+    conn.close()
 
 #%% Função de criação de tabelas
-conn_with_db = 'user={} password={} dbname=grupo_gamma'.format(user, password)
-conn2 = psycopg2.connect(conn_with_db)
-cur2 = conn.cursor()
+conn = psycopg2.connect(
+    user=user,
+    password=password,
+    dbname='grupo_gamma',
+)
+cur = conn.cursor()
 
 def create_table(sql_query):
     try:
-        cur2.execute(sql_query)
+        cur.execute(sql_query)
     except Exception as e:
         print(f"{type(e).__name__}: {e}")
-        print("Query: " + str(cur2.query))
-        conn2.rollback()
-        cur2.close()
+        print("Query: " + str(cur.query))
+        conn.rollback()
+        cur.close()
     else:
-        conn2.commit()
+        conn.commit()
 
 #%% Criando a tabela "estado"
 state_sql = """

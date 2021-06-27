@@ -11,15 +11,17 @@ import pandas as pd
 user = "postgres"
 password = "your_password"
 
-data_path = "caso_full.csv"
+csv_path = "C:\\Users\\patri\\casos_brasil.csv"
 
 #%% Conectar no banco de dados
-conn_string = 'user={} password={} dbname=grupo_gamma'.format(user, password)
-conn = psycopg2.connect(conn_string)
+conn = psycopg2.connect(
+    user=user,
+    password=password,
+    dbname='grupo_gamma',
+)
 cur = conn.cursor()
 
 #%% Função helper de Inserção de Dados no Banco de Dados
-
 def insert_data(sql_query, row_values):
     try:
         cur.execute(sql_query, row_values)
@@ -32,7 +34,7 @@ def insert_data(sql_query, row_values):
         conn.commit()
 
 #%% Leitura da base de Casos de COVID e preenchimento de valores faltantes com 0
-df_covid = pd.read_csv(data_path)
+df_covid = pd.read_csv(csv_path)
 df_covid.head()
 
 df_covid = df_covid.fillna(0)
@@ -62,7 +64,7 @@ for index, row in df_table_states.iterrows():
     insert_data(state_sql, row_dict)
    
 #%% Filtro pelas colunas que serão necessárias na Tabela Cidade, dropando as duplicidades e fazendo a inserção
-cols_cidades = ['city_ibge_code', 'city', 'state', 'estimated_population']
+cols_cidades = ['city_ibge_code', 'city', 'state', 'estimated_population_2019']
 df_table_cidades = df_selected_cities.filter(cols_cidades, axis=1).drop_duplicates()
 
 # Criando a coluna state_id com um valor padrão
@@ -81,7 +83,7 @@ for index, row in df_table_cidades.iterrows():
     row_dict = {
         'codigo_ibge': row['city_ibge_code'], 
         'nome': row["city"],
-        'populacao_estimada': row["estimated_population"],
+        'populacao_estimada': row["estimated_population_2019"],
         'estado_id': row["state_id"],
     }
     insert_data(city_sql, row_dict)
