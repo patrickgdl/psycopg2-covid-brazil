@@ -8,7 +8,7 @@ import psycopg2
 
 #%% Credenciais do Banco de Dados
 user = "postgres"
-password = "4527"
+password = "your_password"
 dbname = "covid"
 
 #%% Criação do Banco de Dados

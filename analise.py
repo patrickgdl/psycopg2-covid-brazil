@@ -11,7 +11,7 @@ FS = (16, 8)  # figure size
 
 #%% Credenciais do Banco de Dados
 user = "postgres"
-password = "4527"
+password = "your_password"
 dbname = "covid"
 
 #%% Conexão no Banco de Dados
