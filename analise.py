@@ -6,15 +6,13 @@
 #%% Importar os pacotes de conexão ao BD
 import psycopg2
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 FS = (16, 8)  # figure size
 
 #%% Credenciais do Banco de Dados
 user = "postgres"
-password = "your_password"
-dbname = 'grupo_gamma'
+password = "4527"
+dbname = "covid"
 
 #%% Conexão no Banco de Dados
 conn = psycopg2.connect(user=user, password=password, dbname = dbname)
@@ -172,6 +170,32 @@ _ = ax.set(
 ax.autoscale(enable=True, axis="x", tight=True)
 
 
+#%%
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+rotulos = ['Q1', 'Q2', 'Q3', 'Q4']
+vendas_2018 = [2.0, 3.4, 3.0, 3.5]
+vendas_2019 = [2.5, 3.2, 3.4, 2.0]
+espessura = 0.35
+x = np.arange(len(rotulos))
+
+fig, ax = plt.subplots(figsize=(12, 8))
+
+rects1 = ax.bar(x - espessura / 2, vendas_2018, espessura, label='2018', color='red')
+rects2 = ax.bar(x + espessura / 2, vendas_2019, espessura, label='2019', color='green')
+
+ax.set_ylabel('Milhões')
+ax.set_xlabel('Quadrimestre')
+ax.set_title('Vendas por quadrimestre/ano (em milhões)')
+ax.set_xticks(x)
+ax.set_xticklabels(rotulos)
+ax.legend()
+
+fig.tight_layout()
+
+plt.show()
 
 
 

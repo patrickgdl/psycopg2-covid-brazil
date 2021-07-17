@@ -8,13 +8,14 @@ import psycopg2
 
 #%% Credenciais do Banco de Dados
 user = "postgres"
-password = "your_password"
+password = "4527"
+dbname = "covid"
 
 #%% Criação do Banco de Dados
 conn = psycopg2.connect(user=user, password=password)
 cur = conn.cursor()
 
-sql_query = 'CREATE DATABASE grupo_gamma'
+sql_query = 'CREATE DATABASE ' + dbname
 
 conn.autocommit = True
 try:
@@ -32,7 +33,7 @@ else:
 conn = psycopg2.connect(
     user=user,
     password=password,
-    dbname='grupo_gamma',
+    dbname=dbname,
 )
 cur = conn.cursor()
 
@@ -75,6 +76,8 @@ city_sql = """
         data date NOT NULL,
         ultimos_confirmados INTEGER NOT NULL,
         ultimas_mortes INTEGER NOT NULL,
+        confirmados_por_habitantes INTEGER NULL,
+        mortes_por_habitantes INTEGER NULL,
         cidade_id INTEGER REFERENCES cidade(codigo_ibge)
     )
 """

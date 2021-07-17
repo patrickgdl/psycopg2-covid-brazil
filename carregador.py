@@ -17,7 +17,7 @@ csv_path = "C:\\Users\\patri\\casos_brasil.csv"
 conn = psycopg2.connect(
     user=user,
     password=password,
-    dbname='grupo_gamma',
+    dbname='covid',
 )
 cur = conn.cursor()
 
